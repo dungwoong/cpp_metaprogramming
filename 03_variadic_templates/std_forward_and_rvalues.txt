@@ -1,0 +1,38 @@
+https://stackoverflow.com/questions/4549151/c-double-address-operator
+
+r-values don't have memory addresses, simply put. So e.g. 6 or 'v' are rvalues.
+If we did int a; that's an lvalue, if we do (a+2) that's an rvalue.
+
+So you can int&& d = 5; to declare a reference to an lvalue.
+But if you have int a; and then int&& b = a; that doesn't work since a is an lvalue.
+
+
+
+template<typename T>
+void wrapper(T&& arg) {   // T&& is a forwarding reference
+    func(arg);            // problem!
+}
+
+Here, if we pass an lvalue to arg, it's fine.
+If we pass an rvalue, it becomes an lvalue inside the function because all named variables are lvalues.
+
+Forward will pass it as-is.
+
+
+STD::MOVE
+so e.g. if you move something from a to b, b will just take a's memory, and then a will point at nothing.
+rvalues typically have no name, you can just start pointing at their stuff.
+lvalues are named, and you typically don't want to steal from them.
+
+So std::move casts an lvalue to an rvalue(chatGPT) and std::forward does what we talked about before.
+
+I don't get it, it's not that relevant for now.
+
+https://stackoverflow.com/questions/17357888/exact-difference-between-rvalue-and-lvalue
+lvalue is like LEFT HAND SIDE value, aka you're assigning it to something.
+an rvalue is like a RIGHT HAND SIDE value aka it has a value but isn't assigned.
+
+So e.g. ++8 will not compile, the arg has to be a modifiable lvalue.
+So you can keep something as a reference to an rvalue, aka you're not gonna do stuff to it, using std::forward
+So && let's you store references to rvalues, enabling move semantics. Moving will steal it's resources, I think you just don't wanna use the pointer after.
+You can delete or reassign the pointer.
