@@ -107,6 +107,7 @@ struct contains_type :
 // - Option 1: create a struct none{} and just set it to that type when the list is empty
 // - Option 2: create the new non_empty_contains_type. Just notice that the template params are just the list and whatever, so when the compiler
 // tries to do substitutions, it won't have any problems. 
+// - Option 3: contains ASSUMEs it's non-empty so we can remove that initial if_, then make a specialization for empty list that's just false_type.
 
 
 int main() {
